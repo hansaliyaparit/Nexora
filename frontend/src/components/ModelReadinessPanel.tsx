@@ -15,7 +15,7 @@ export default function ModelReadinessPanel({ findings }: Props) {
       transition={{ delay: 0.28 }}
     >
       <div className="flex items-center gap-2 mb-5">
-        <Layers3 className="w-4 h-4 text-blue-600" />
+        <Layers3 className="w-4 h-4 text-emerald-600" />
         <h3 className="font-display text-sm tracking-widest text-gray-400 uppercase">
           Model Readiness
         </h3>
@@ -24,7 +24,7 @@ export default function ModelReadinessPanel({ findings }: Props) {
         {findings.map((finding) => (
           <div key={finding.task} className="flex gap-3">
             {finding.eligible ? (
-              <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-blue-600" />
+              <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-emerald-600" />
             ) : (
               <Ban className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
             )}
@@ -32,7 +32,7 @@ export default function ModelReadinessPanel({ findings }: Props) {
               <p className="text-sm font-medium text-gray-800 capitalize">{finding.task}</p>
               <p className="text-xs text-gray-500 mt-1 leading-relaxed">{finding.reason}</p>
               {finding.target_candidates.length > 0 && (
-                <p className="text-xs text-blue-700 mt-1.5 truncate" title={finding.target_candidates.join(", ")}>
+                <p className="text-xs text-emerald-700 mt-1.5 truncate" title={finding.target_candidates.join(", ")}>
                   Targets: {finding.target_candidates.join(", ")}
                 </p>
               )}

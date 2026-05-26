@@ -55,8 +55,8 @@ export default function TargetSelector({ datasetId, analysis, onConfigured }: Pr
       animate={{ opacity: 1, y: 0 }}
     >
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center">
-          <Target className="w-5 h-5 text-blue-600" />
+        <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center">
+          <Target className="w-5 h-5 text-emerald-600" />
         </div>
         <div>
           <h3 className="font-display text-sm tracking-widest text-gray-400 uppercase">
@@ -80,7 +80,7 @@ export default function TargetSelector({ datasetId, analysis, onConfigured }: Pr
                 }}
                 className={`px-3 py-1.5 rounded-lg text-sm border transition-all ${
                   target === s.target_column
-                    ? "border-blue-400 bg-blue-50 text-blue-700"
+                    ? "border-emerald-400 bg-emerald-50 text-emerald-700 font-medium"
                     : "border-gray-200 text-gray-500 hover:border-gray-300"
                 }`}
               >
@@ -100,7 +100,7 @@ export default function TargetSelector({ datasetId, analysis, onConfigured }: Pr
           <select
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100 transition-all"
           >
             <option value="">Select column…</option>
             {columns.map((c) => (
@@ -117,7 +117,7 @@ export default function TargetSelector({ datasetId, analysis, onConfigured }: Pr
           <select
             value={problemType}
             onChange={(e) => setProblemType(e.target.value as ProblemType | "")}
-            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100 transition-all"
           >
             <option value="">Auto-detect</option>
             {PROBLEM_TYPES.map((p) => (

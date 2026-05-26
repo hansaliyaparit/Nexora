@@ -29,13 +29,40 @@ const TECH = ["Python", "FastAPI", "scikit-learn", "XGBoost", "LightGBM", "CatBo
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-nexora-bg">
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-grid bg-[size:48px_48px] opacity-30" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-nexora-accent/15 rounded-full blur-[120px] -translate-y-1/2" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-nexora-accent/15 rounded-full blur-[120px] -translate-y-1/2 animate-pulse-slow" />
+
+        {/* Floating accent orbs */}
+        <motion.div
+          className="absolute top-32 left-[12%] w-3 h-3 rounded-full bg-nexora-accent/30"
+          animate={{ y: [0, -18, 0], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-48 right-[18%] w-2 h-2 rounded-full bg-nexora-accent/20"
+          animate={{ y: [0, -12, 0], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+        />
+        <motion.div
+          className="absolute top-64 left-[25%] w-1.5 h-1.5 rounded-full bg-nexora-dark/10"
+          animate={{ y: [0, -14, 0], opacity: [0.15, 0.4, 0.15] }}
+          transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
+        />
 
         <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-20 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
@@ -49,14 +76,14 @@ export default function LandingPage() {
             Upload a CSV. Select models, run backend-owned predictions, understand the result, and export a complete report.
           </motion.p>
 
-          <motion.div className="flex justify-center gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, ease: [0.16, 1, 0.3, 1] }}>
-            <a href="#upload" className="btn-primary text-base px-8 py-3.5">
-              <Upload className="w-5 h-5" />
+          <motion.div className="flex justify-center gap-4" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+            <a href="#upload" className="btn-primary text-base px-8 py-3.5 group">
+              <Upload className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
               Start Analyzing
             </a>
-            <a href="#how-it-works" className="btn-outline text-base px-6 py-3.5">
+            <a href="#how-it-works" className="btn-outline text-base px-6 py-3.5 group">
               How It Works
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </a>
           </motion.div>
 
@@ -74,20 +101,23 @@ export default function LandingPage() {
             <p className="text-nexora-dark/50">Six steps from raw data to actionable intelligence</p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {STEPS.map((step, i) => (
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {STEPS.map((step) => (
               <motion.div
                 key={step.num}
-                className="relative p-6 rounded-2xl bg-nexora-accent/5 border border-nexora-border hover:border-nexora-accent hover:shadow-card transition-all group"
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
+                className="relative p-6 rounded-2xl bg-nexora-accent/5 border border-nexora-border hover:border-nexora-accent hover:shadow-card transition-all duration-300 group"
+                variants={scaleIn}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <span className="font-mono text-xs text-nexora-accent bg-nexora-accent/10 px-2 py-1 rounded-md font-bold">{step.num}</span>
-                  <div className="w-9 h-9 rounded-lg bg-nexora-accent/10 border border-nexora-accent/30 flex items-center justify-center group-hover:bg-nexora-accent/20 transition-colors">
+                  <div className="w-9 h-9 rounded-lg bg-nexora-accent/10 border border-nexora-accent/30 flex items-center justify-center group-hover:bg-nexora-accent/20 group-hover:scale-110 transition-all duration-300">
                     <step.icon className="w-4 h-4 text-nexora-accent" />
                   </div>
                 </div>
@@ -95,7 +125,7 @@ export default function LandingPage() {
                 <p className="text-sm text-nexora-dark/50 leading-relaxed">{step.desc}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -107,25 +137,28 @@ export default function LandingPage() {
             <p className="text-nexora-dark/50">Every feature you need — free, local, no API keys required</p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {FEATURES.map((f, i) => (
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {FEATURES.map((f) => (
               <motion.div
                 key={f.title}
-                className="glass p-6 hover:shadow-lg transition-shadow group"
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
+                className="glass p-6 hover:shadow-lg transition-all duration-300 group"
+                variants={scaleIn}
+                whileHover={{ y: -3, transition: { duration: 0.2 } }}
               >
-                <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 ${f.accent}`}>
+                <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 ${f.accent}`}>
                   <f.icon className="w-5 h-5" />
                 </div>
                 <h3 className="font-semibold text-nexora-dark mb-1">{f.title}</h3>
                 <p className="text-sm text-nexora-dark/60">{f.desc}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -144,13 +177,23 @@ export default function LandingPage() {
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <p className="text-xs text-nexora-dark/40 uppercase tracking-widest mb-4">Powered By</p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <motion.div
+            className="flex flex-wrap justify-center gap-3"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {TECH.map((t) => (
-              <span key={t} className="px-3 py-1.5 rounded-full text-xs font-mono text-nexora-dark/50 bg-nexora-accent/10 border border-nexora-accent/20">
+              <motion.span
+                key={t}
+                className="px-3 py-1.5 rounded-full text-xs font-mono text-nexora-dark/50 bg-nexora-accent/10 border border-nexora-accent/20 hover:bg-nexora-accent/20 hover:text-nexora-dark/70 transition-colors duration-300"
+                variants={{ hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } }}
+              >
                 {t}
-              </span>
+              </motion.span>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

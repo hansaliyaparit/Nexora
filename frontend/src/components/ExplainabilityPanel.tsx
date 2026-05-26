@@ -29,8 +29,8 @@ import {
 } from "../api/client";
 
 const GRADIENT_COLORS = [
-  "#4285f4", "#34a853", "#fbbc05", "#ea4335", "#a142f4",
-  "#00acc1", "#ff7043", "#7e57c2", "#26a69a", "#5c6bc0",
+  "#10b981", "#0d9488", "#0f766e", "#059669", "#047857",
+  "#34d399", "#2dd4bf", "#14b8a6", "#06b6d4", "#0891b2",
 ];
 
 const cleanError = (message: string) => message.replace(/\x1b\[[0-9;]*m/g, "").slice(0, 260);
@@ -122,8 +122,8 @@ export default function ExplainabilityPanel({
       >
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-              <Brain className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center">
+              <Brain className="w-6 h-6 text-emerald-600" />
             </div>
             <div>
               <h3 className="font-display text-lg text-gray-800 tracking-wide">
@@ -160,7 +160,7 @@ export default function ExplainabilityPanel({
               type="button"
               onClick={handleReport}
               disabled={reportLoading}
-              className="btn-ghost border border-blue-100 hover:border-blue-300 disabled:opacity-50"
+              className="btn-ghost border border-emerald-100 hover:border-emerald-300 disabled:opacity-50"
             >
               {reportLoading ? (
                 <>
@@ -188,7 +188,7 @@ export default function ExplainabilityPanel({
           <motion.div
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 flex items-center gap-2 text-blue-600 text-sm"
+            className="mt-4 flex items-center gap-2 text-emerald-600 text-sm"
           >
             <CheckCircle2 className="w-4 h-4" />
             PDF report downloaded successfully!
@@ -207,7 +207,7 @@ export default function ExplainabilityPanel({
             transition={{ delay: 0.1 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="w-4 h-4 text-blue-500" />
+              <BarChart3 className="w-4 h-4 text-emerald-500" />
               <h3 className="font-display text-sm tracking-widest text-gray-400 uppercase">
                 Model Metrics — {result.model_name}
               </h3>
@@ -218,7 +218,7 @@ export default function ExplainabilityPanel({
                   <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1">
                     {key}
                   </p>
-                  <p className="font-mono text-lg text-blue-600 font-semibold">
+                  <p className="font-mono text-lg text-emerald-600 font-semibold">
                     {key === "accuracy" ? `${(val * 100).toFixed(1)}%` : val.toFixed(4)}
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export default function ExplainabilityPanel({
             transition={{ delay: 0.2 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <Layers className="w-4 h-4 text-blue-500" />
+              <Layers className="w-4 h-4 text-emerald-500" />
               <h3 className="font-display text-sm tracking-widest text-gray-400 uppercase">
                 Feature Importance (SHAP)
               </h3>
@@ -272,10 +272,10 @@ export default function ExplainabilityPanel({
                 <Tooltip
                   contentStyle={{
                     background: "#ffffff",
-                    border: "1px solid #dbeafe",
+                    border: "1px solid #a7f3d0",
                     borderRadius: 12,
                     fontSize: 12,
-                    boxShadow: "0 12px 28px rgba(66,133,244,0.12)",
+                    boxShadow: "0 12px 28px rgba(16,185,129,0.12)",
                   }}
                   formatter={(val: number) => [val.toFixed(6), "Mean |SHAP|"]}
                 />
@@ -380,13 +380,13 @@ export default function ExplainabilityPanel({
       {/* Empty state */}
       {!result && !loading && (
         <motion.div
-          className="glass p-8 text-center border-dashed border-blue-200"
+          className="glass p-8 text-center border-dashed border-emerald-200"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <Brain className="w-10 h-10 text-blue-300 mx-auto mb-3" />
+          <Brain className="w-10 h-10 text-emerald-300 mx-auto mb-3" />
           <p className="text-gray-500 text-sm">
-            Click <span className="text-blue-600 font-medium">"Run SHAP Analysis"</span> to understand
+            Click <span className="text-emerald-600 font-medium">"Run SHAP Analysis"</span> to understand
             why your champion model makes the predictions it does.
           </p>
           <p className="text-gray-400 text-xs mt-2">

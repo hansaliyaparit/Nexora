@@ -23,7 +23,7 @@ import {
   YAxis,
 } from "recharts";
 
-const LAB_COLORS = ["#4285f4", "#34a853", "#fbbc05", "#ea4335", "#a142f4", "#00acc1"];
+const LAB_COLORS = ["#93C998", "#7ab37f", "#d4a843", "#c97a5a", "#8bb896", "#a8d9a8"];
 
 interface Props {
   datasetId: string;
@@ -227,7 +227,7 @@ export default function TrainingArena({ datasetId, problemType, onComplete, trai
         {running && (
           <motion.div className="mt-6 space-y-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div className="flex justify-between text-sm">
-              <span className="text-blue-600 font-mono">
+              <span className="text-emerald-600 font-mono">
                 {current
                   ? `Training: ${current.name} (${current.index}/${current.total})`
                   : "Initializing arena…"}
@@ -238,7 +238,7 @@ export default function TrainingArena({ datasetId, problemType, onComplete, trai
             </div>
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-blue-500 via-green-500 to-yellow-400"
+                className="h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-amber-400"
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.3 }}
               />
@@ -296,7 +296,7 @@ export default function TrainingArena({ datasetId, problemType, onComplete, trai
                 </h3>
                 <p className="text-xs text-gray-400 mt-1">Compares the strongest models by {metricLabel}.</p>
               </div>
-              <span className="text-xs font-mono text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-mono text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
                 top {topModelChartData.length}
               </span>
             </div>
@@ -365,7 +365,7 @@ export default function TrainingArena({ datasetId, problemType, onComplete, trai
                     name === "score" ? [formatMetric(value), metricLabel] : [value, name]
                   }
                 />
-                <Scatter data={speedScoreData} fill="#4285f4">
+                <Scatter data={speedScoreData} fill="#93C998">
                   {speedScoreData.map((_, i) => (
                     <Cell key={i} fill={LAB_COLORS[i % LAB_COLORS.length]} />
                   ))}
@@ -445,7 +445,7 @@ export default function TrainingArena({ datasetId, problemType, onComplete, trai
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
                       className={`border-b border-gray-50 ${
-                        i === 0 ? "bg-blue-50/70" : "hover:bg-gray-50/50"
+                        i === 0 ? "bg-emerald-50/70" : "hover:bg-gray-50/50"
                       }`}
                     >
                       <td className="px-6 py-3 font-mono text-gray-400">{i + 1}</td>
@@ -457,7 +457,7 @@ export default function TrainingArena({ datasetId, problemType, onComplete, trai
                           {m.family}
                         </span>
                       </td>
-                      <td className="px-4 py-3 font-mono text-blue-600">
+                      <td className="px-4 py-3 font-mono text-emerald-600">
                         {metricLabel === "Accuracy"
                           ? `${(primaryMetric(m) * 100).toFixed(1)}%`
                           : primaryMetric(m).toFixed(4)}

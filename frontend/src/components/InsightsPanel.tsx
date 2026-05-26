@@ -14,7 +14,7 @@ import {
 import type { PreprocessResult } from "../types/pipeline";
 import PreprocessSteps from "./PreprocessSteps";
 
-const LAB_COLORS = ["#4285f4", "#34a853", "#fbbc05", "#ea4335", "#a142f4", "#00acc1"];
+const LAB_COLORS = ["#10b981", "#34a853", "#fbbc05", "#ea4335", "#a142f4", "#00acc1"];
 
 interface Props {
   result: PreprocessResult;
@@ -92,9 +92,9 @@ export default function InsightsPanel({ result }: Props) {
                 <Tooltip
                   contentStyle={{
                     background: "#ffffff",
-                    border: "1px solid #dbeafe",
+                    border: "1px solid #a7f3d0",
                     borderRadius: 12,
-                    boxShadow: "0 12px 28px rgba(66,133,244,0.12)",
+                    boxShadow: "0 12px 28px rgba(16,185,129,0.12)",
                   }}
                 />
                 <Bar dataKey="correlation" radius={[0, 6, 6, 0]}>
@@ -125,7 +125,7 @@ export default function InsightsPanel({ result }: Props) {
               Shows how preprocessing changed the dataset before model training.
             </p>
           </div>
-          <span className="text-xs font-mono text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+          <span className="text-xs font-mono text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
             {meta.feature_count} ready features
           </span>
         </div>
@@ -137,14 +137,14 @@ export default function InsightsPanel({ result }: Props) {
             <Tooltip
               contentStyle={{
                 background: "#ffffff",
-                border: "1px solid #dbeafe",
+                border: "1px solid #a7f3d0",
                 borderRadius: 12,
-                boxShadow: "0 12px 28px rgba(66,133,244,0.12)",
+                boxShadow: "0 12px 28px rgba(16,185,129,0.12)",
               }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Bar dataKey="before" name="Before" fill="#4285f4" radius={[6, 6, 0, 0]} />
-            <Bar dataKey="after" name="After" fill="#34a853" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="before" name="Before" fill="#0d9488" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="after" name="After" fill="#10b981" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </motion.div>
@@ -167,9 +167,9 @@ export default function InsightsPanel({ result }: Props) {
               <Tooltip
                 contentStyle={{
                   background: "#ffffff",
-                  border: "1px solid #dbeafe",
+                  border: "1px solid #a7f3d0",
                   borderRadius: 12,
-                  boxShadow: "0 12px 28px rgba(66,133,244,0.12)",
+                  boxShadow: "0 12px 28px rgba(16,185,129,0.12)",
                 }}
               />
               <Bar dataKey="percentage" radius={[4, 4, 0, 0]}>

@@ -37,18 +37,18 @@ export default function PredictionSuggestions({ suggestions }: Props) {
           return (
             <motion.div
               key={s.target_column}
-              className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-blue-200 transition-colors"
+              className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-emerald-200 transition-colors"
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 * i }}
             >
-              <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-                <Icon className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0">
+                <Icon className="w-5 h-5 text-emerald-600" />
               </div>
               <div className="flex-1 min-w-0">
                 <motion.div className="flex items-center gap-2 flex-wrap">
                   <span className="font-medium text-gray-800">{s.target_column}</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                     {s.problem_type}
                   </span>
                   <span className="text-xs font-mono text-gray-400">

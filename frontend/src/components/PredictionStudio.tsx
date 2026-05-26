@@ -152,7 +152,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-16 text-blue-600">
+      <div className="flex items-center justify-center py-16 text-emerald-600">
         <Loader2 className="w-5 h-5 animate-spin" />
       </div>
     );
@@ -167,8 +167,8 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
       >
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
-              <FlaskConical className="w-5 h-5 text-blue-600" />
+            <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
+              <FlaskConical className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
               <h2 className="font-display text-lg text-gray-900">Prediction Studio</h2>
@@ -177,7 +177,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
               </p>
             </div>
           </div>
-          <div className="text-xs text-gray-500 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+          <div className="text-xs text-gray-500 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
             Chat explains. Trained models calculate.
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
 
           <div className="space-y-2 max-h-[350px] overflow-y-auto pr-1">
             {eligibilityReason && (
-              <p className="text-xs text-blue-700 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 mb-3">
+              <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 mb-3">
                 {eligibilityReason}
               </p>
             )}
@@ -212,14 +212,14 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
                 <label
                   key={model.model_id}
                   className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
-                    checked ? "border-blue-200 bg-blue-50/70" : "border-gray-100 hover:border-blue-100"
+                    checked ? "border-emerald-200 bg-emerald-50/70" : "border-gray-100 hover:border-emerald-100"
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={checked}
                     onChange={() => selectModel(model.model_id)}
-                    className="w-4 h-4 accent-blue-600"
+                    className="w-4 h-4 accent-emerald-600"
                   />
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm text-gray-800 truncate">{model.model_name}</span>
@@ -228,7 +228,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
                     </span>
                   </span>
                   {model.recommended && (
-                    <span className="text-[10px] text-blue-700 bg-blue-100 rounded px-2 py-1">
+                    <span className="text-[10px] text-emerald-700 bg-emerald-100 rounded px-2 py-1">
                       Suggested
                     </span>
                   )}
@@ -270,7 +270,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
 
         <div className="glass p-6">
           <div className="flex items-center gap-2 mb-4">
-            <SlidersHorizontal className="w-4 h-4 text-blue-600" />
+            <SlidersHorizontal className="w-4 h-4 text-emerald-600" />
             <h3 className="text-sm font-medium text-gray-800">Prediction Inputs</h3>
           </div>
 
@@ -281,7 +281,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
           ) : (
             <>
               <p className="text-xs text-gray-400 mb-4">
-                Target: <span className="text-blue-600 font-medium">{status.target_column}</span>.
+                Target: <span className="text-emerald-600 font-medium">{status.target_column}</span>.
                 Blank fields use typical training values.
               </p>
               {!modelsReady && (
@@ -359,7 +359,7 @@ function InputField({
         <select
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className="w-full h-10 bg-white border border-gray-200 rounded-lg px-3 text-sm text-gray-700 focus:border-blue-400 focus:outline-none"
+          className="w-full h-10 bg-white border border-gray-200 rounded-lg px-3 text-sm text-gray-700 focus:border-emerald-400 focus:outline-none"
         >
           <option value="">Typical: {String(field.default ?? "-")}</option>
           {field.options.map((option) => (
@@ -372,7 +372,7 @@ function InputField({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={field.default == null ? "Enter value" : `Typical: ${field.default}`}
-          className="w-full h-10 bg-white border border-gray-200 rounded-lg px-3 text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none"
+          className="w-full h-10 bg-white border border-gray-200 rounded-lg px-3 text-sm text-gray-700 placeholder:text-gray-400 focus:border-emerald-400 focus:outline-none"
         />
       )}
     </label>
@@ -402,9 +402,9 @@ function PredictionResultView({
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-5">
         <div>
-          <p className="text-[11px] uppercase text-blue-600 font-mono mb-1">Prediction Receipt</p>
+          <p className="text-[11px] uppercase text-emerald-600 font-mono mb-1">Prediction Receipt</p>
           <h3 className="text-lg text-gray-900">
-            {receipt.target_column}: <span className="font-semibold text-blue-700">{renderValue(receipt.consensus)}</span>
+            {receipt.target_column}: <span className="font-semibold text-emerald-700">{renderValue(receipt.consensus)}</span>
           </h3>
           <p className="text-xs text-gray-400 mt-1">{receipt.consensus_label}</p>
         </div>
@@ -430,7 +430,7 @@ function PredictionResultView({
           <div key={output.model_id} className="border border-gray-100 rounded-xl p-4">
             <p className="text-sm text-gray-800 truncate">{output.model_name}</p>
             <p className="text-xs text-gray-400 mt-1">{output.family}</p>
-            <p className="text-2xl text-blue-700 font-mono mt-3">{renderValue(output.prediction)}</p>
+            <p className="text-2xl text-emerald-700 font-mono mt-3">{renderValue(output.prediction)}</p>
             <div className="flex gap-3 mt-3 text-xs text-gray-500">
               <span className="inline-flex items-center gap-1">
                 <Gauge className="w-3.5 h-3.5" />
@@ -447,23 +447,23 @@ function PredictionResultView({
           type="button"
           onClick={() => onExplain(receipt.predictions[0]?.model_id)}
           disabled={explaining}
-          className="btn-ghost border border-blue-100 text-sm disabled:opacity-50"
+          className="btn-ghost border border-emerald-100 text-sm disabled:opacity-50 hover:bg-emerald-50/40"
         >
-          {explaining ? <Loader2 className="w-4 h-4 animate-spin" /> : <BrainCircuit className="w-4 h-4" />}
+          {explaining ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <BrainCircuit className="w-4 h-4 text-emerald-600" />}
           Why this prediction?
         </button>
 
         {explanation && (
-          <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 p-4">
-            <p className="text-xs text-blue-600 uppercase tracking-wider mb-2">{explanation.method}</p>
+          <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+            <p className="text-xs text-emerald-600 uppercase tracking-wider mb-2">{explanation.method}</p>
             <p className="text-sm text-gray-700 mb-3">
               {explanation.model_name} moved from typical baseline{" "}
               <span className="font-mono">{renderValue(explanation.baseline_prediction)}</span> to{" "}
-              <span className="font-mono text-blue-700">{renderValue(explanation.prediction)}</span>.
+              <span className="font-mono text-emerald-700">{renderValue(explanation.prediction)}</span>.
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {explanation.contributions.slice(0, 6).map((item) => (
-                <div key={item.feature} className="rounded-lg bg-white border border-blue-100 p-3">
+                <div key={item.feature} className="rounded-lg bg-white border border-emerald-100 p-3">
                   <p className="text-xs text-gray-500 truncate" title={item.feature}>{item.feature}</p>
                   <p className={`font-mono text-sm mt-1 ${item.contribution >= 0 ? "text-emerald-700" : "text-red-600"}`}>
                     {item.contribution >= 0 ? "+" : ""}{item.contribution.toFixed(4)}

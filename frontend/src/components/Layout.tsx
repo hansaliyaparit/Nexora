@@ -13,33 +13,33 @@ export default function Layout() {
           className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between"
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Link to="/" className="flex items-center gap-2 group text-nexora-dark hover:text-nexora-accent transition-colors">
+          <Link to="/" className="flex items-center gap-2 group text-nexora-dark hover:text-nexora-accent transition-colors duration-300">
             <NexoraLogo size="sm" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-sm text-nexora-dark/60">
-            <Link to="/datasets" className="hover:text-nexora-accent transition-colors">
+            <Link to="/datasets" className="hover:text-nexora-accent transition-colors duration-300 underline-animate">
               History
             </Link>
             {isHome && (
               <>
-                <a href="#how-it-works" className="hover:text-nexora-accent transition-colors">
+                <a href="#how-it-works" className="hover:text-nexora-accent transition-colors duration-300 underline-animate">
                   How It Works
                 </a>
-                <a href="#features" className="hover:text-nexora-accent transition-colors">
+                <a href="#features" className="hover:text-nexora-accent transition-colors duration-300 underline-animate">
                   Features
                 </a>
-                <a href="#upload" className="hover:text-nexora-accent transition-colors">
+                <a href="#upload" className="hover:text-nexora-accent transition-colors duration-300 underline-animate">
                   Upload
                 </a>
               </>
             )}
           </nav>
 
-          <Link to="/" className="btn-ghost text-sm">
-            New dataset
+          <Link to="/" className="btn-ghost text-sm group">
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200">New dataset</span>
           </Link>
         </motion.div>
       </header>
