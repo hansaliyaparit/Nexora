@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import advanced, auth, chat, datasets, explainability, pipeline, training
 
+
 app = FastAPI(
     title=settings.app_name,
     description="Autonomous AI-powered predictive analytics platform",
@@ -13,6 +14,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
+    allow_origin_regex=settings.cors_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
