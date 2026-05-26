@@ -98,6 +98,25 @@ def history_item(dataset_id: str) -> DatasetHistoryItem | None:
 
 
 def list_history(include_archived: bool = False) -> list[DatasetHistoryItem]:
+    # Try MongoDB first
+    from app.services.persistence_service import find
+    db_items = find("datasets")
+    if db_items:
+        out = []
+        for doc in db_items:
+            try:
+                item = DatasetHistoryItem.model_validate(doc)
+                if item.archived and not include_archived:
+                    continue
+                out.append(item)
+            except Exception:
+                continue
+        if out:
+            # Sort by updated_at or created_at desc
+            out.sort(key=lambda x: x.updated_at or x.created_at or "", reverse=True)
+            return out
+
+    # Local fallback
     items: list[DatasetHistoryItem] = []
     for path in _metadata_paths():
         dataset_id = path.name.replace(".meta.json", "")
@@ -108,6 +127,7 @@ def list_history(include_archived: bool = False) -> list[DatasetHistoryItem]:
             continue
         items.append(item)
     return items
+
 
 
 def delete_dataset(dataset_id: str) -> None:

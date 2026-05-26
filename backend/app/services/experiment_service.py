@@ -16,6 +16,22 @@ def _path(dataset_id: str) -> Path:
 
 
 def list_experiments(dataset_id: str) -> list[ExperimentRecord]:
+    # Try MongoDB first
+    from app.services.persistence_service import find
+    db_items = find("experiments", {"dataset_id": dataset_id})
+    if db_items:
+        out = []
+        for doc in db_items:
+            try:
+                out.append(ExperimentRecord.model_validate(doc))
+            except Exception:
+                continue
+        if out:
+            # Sort by created_at asc
+            out.sort(key=lambda x: x.created_at)
+            return out
+
+    # Local fallback
     path = _path(dataset_id)
     if not path.exists():
         return []
@@ -24,6 +40,7 @@ def list_experiments(dataset_id: str) -> list[ExperimentRecord]:
     except (OSError, ValueError):
         return []
     return [ExperimentRecord(**item) for item in raw]
+
 
 
 def save_experiment(record: ExperimentRecord) -> ExperimentRecord:
