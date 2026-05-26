@@ -28,6 +28,16 @@ app.include_router(explainability.router)
 app.include_router(advanced.router)
 
 
+@app.get("/")
+async def root():
+    return {
+        "service": "Nexora API",
+        "version": "0.4.0",
+        "docs": "/docs",
+        "health": "/api/health",
+    }
+
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "nexora-api", "version": "0.4.0"}

@@ -14,8 +14,17 @@ import type {
   ProductionStatus,
 } from "../types/production";
 
+function sanitizeBaseUrl(raw: string | undefined): string {
+  if (!raw) return "/api";
+  let url = raw.trim();
+  // Fix common protocol typos (e.g. "ttps://..." → "https://...")
+  if (/^ttps:/i.test(url)) url = `h${url}`;
+  if (/^ttp:/i.test(url)) url = `h${url}`;
+  return url;
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
+  baseURL: sanitizeBaseUrl(import.meta.env.VITE_API_BASE_URL as string | undefined),
   timeout: 120_000,
 });
 

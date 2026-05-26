@@ -1,6 +1,16 @@
 # Nexora
 
-**A local predictive analytics platform** that understands datasets, lets users train selected reusable models, executes backend-owned predictions, benchmarks optional model comparisons, and uses local language models for guidance and education.
+**An AI-powered predictive analytics platform** that understands datasets, lets users train selected reusable models, executes backend-owned predictions, benchmarks optional model comparisons, and uses local language models for guidance and education.
+
+## Live Demo
+
+| Service | URL |
+|---------|-----|
+| Frontend (Netlify) | [nexoraprediction.netlify.app](https://nexoraprediction.netlify.app/) |
+| Backend API (Render) | [nexora-360r.onrender.com](https://nexora-360r.onrender.com/) |
+| API Docs | [nexora-360r.onrender.com/docs](https://nexora-360r.onrender.com/docs) |
+
+> **Note:** The Render free-tier backend may take ~30 seconds to cold-start on the first request.
 
 ## Stack
 
@@ -8,7 +18,7 @@
 |-------|-------------|
 | Frontend | React, Tailwind CSS, Framer Motion, Recharts, Axios, React Router |
 | Backend | FastAPI, Uvicorn, Pandas, NumPy |
-| ML (planned) | Scikit-learn, XGBoost, LightGBM, CatBoost, PyCaret, SHAP, Prophet |
+| ML | Scikit-learn, XGBoost, LightGBM, CatBoost (256+ model registry) |
 | AI (planned) | Ollama · Phi-3 Mini |
 | Database | Local file store by default · MongoDB Atlas optional |
 | Auth | Firebase Auth ready for production token verification |
@@ -97,32 +107,25 @@ OLLAMA_MODEL=phi3:mini
 
 Nexora is configured for a split deployment:
 
-- **Frontend:** Netlify builds `frontend` with `npm run build` and publishes `dist`.
+- **Frontend:** Netlify builds `frontend` with `npm run build` and publishes `dist`. The production API URL is set in `frontend/.env.production`.
 - **Backend:** Render runs the FastAPI app from `backend` with `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
 - **Database:** Set `PERSISTENCE_BACKEND=mongodb` and `MONGODB_URI` to a MongoDB Atlas connection string. Local JSON/CSV storage remains available for development.
 - **Auth:** Set `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_JSON` when Firebase login is enabled.
 
-Frontend environment:
+Frontend environment (`frontend/.env.production`):
 
 ```
-VITE_API_BASE_URL=https://api.yourdomain.com/api
+VITE_API_BASE_URL=https://nexora-360r.onrender.com/api
 ```
 
-Backend environment:
+Backend environment (set in Render dashboard):
 
 ```
-PUBLIC_API_URL=https://api.yourdomain.com
-PUBLIC_APP_URL=https://yourdomain.com
-CORS_ORIGINS=["https://yourdomain.com","https://www.yourdomain.com"]
+PUBLIC_API_URL=https://nexora-360r.onrender.com
+PUBLIC_APP_URL=https://nexoraprediction.netlify.app
+CORS_ORIGINS=["https://nexoraprediction.netlify.app","https://6a161f8cb8a2726651a786f7--nexoraprediction.netlify.app"]
 MONGODB_URI=mongodb+srv://...
 ```
-
-Suggested domain layout:
-
-| Host | Target |
-|------|--------|
-| `yourdomain.com` / `www.yourdomain.com` | Netlify site |
-| `api.yourdomain.com` | Render web service |
 
 ## Roadmap
 
@@ -138,6 +141,8 @@ nexora/
 ├── backend/          # FastAPI + dataset intelligence
 ├── frontend/         # React dashboard
 ├── sample-data/      # Example CSV files
+├── netlify.toml      # Netlify build config
+├── render.yaml       # Render deployment blueprint
 └── README.md
 ```
 
@@ -145,6 +150,7 @@ nexora/
 
 | Method | Path | Description |
 |--------|------|-------------|
+| GET | `/` | Service info (name, version, links) |
 | GET | `/api/health` | Health check |
 | GET | `/api/auth/status` | Firebase auth integration status |
 | GET | `/api/auth/me` | Verify a Firebase bearer token when configured |
