@@ -119,7 +119,40 @@ def _is_detail_request(message: str) -> bool:
         "tell me more",
         "go deeper",
         "why and how",
-    )\n    \n    # Quick detection for explicit requests (highest priority)\n    if any(phrase in lower for phrase in explicit_detail_phrases):\n        return True\n    \n    # Context signals that suggest user wants details\n    detail_signals = (\n        \"?\" * 2,  # Multiple question marks (urgency/emphasis)\n        \"!\" * 2,  # Multiple exclamation marks (emphasis)\n        len(message) > 100,  # Longer messages often have more context\n        \"because\" in lower,  # User asking for reasons\n        \"how does\" in lower,\n        \"why is\" in lower,\n        \"what about\" in lower,\n        \"help me understand\" in lower,\n        \"explain how\" in lower,\n        \"teach me\" in lower,\n        \"what's the difference\" in lower,\n    )\n    \n    # Check for multiple signals\n    signal_count = sum(1 for signal in detail_signals if isinstance(signal, bool) and signal)\n    \n    # If 2+ signals are true, likely a detail request\n    if signal_count >= 2:\n        return True\n    \n    # Check if message seems exploratory (contains multiple topics)\n    question_marks = lower.count(\"?\")\n    if question_marks >= 2:\n        return True\n    \n    return False
+    )
+    
+    # Quick detection for explicit requests (highest priority)
+    if any(phrase in lower for phrase in explicit_detail_phrases):
+        return True
+    
+    # Context signals that suggest user wants details
+    detail_signals = (
+        "?" * 2 in lower,  # Multiple question marks (urgency/emphasis)
+        "!" * 2 in lower,  # Multiple exclamation marks (emphasis)
+        len(message) > 100,  # Longer messages often have more context
+        "because" in lower,  # User asking for reasons
+        "how does" in lower,
+        "why is" in lower,
+        "what about" in lower,
+        "help me understand" in lower,
+        "explain how" in lower,
+        "teach me" in lower,
+        "what's the difference" in lower,
+    )
+    
+    # Check for multiple signals
+    signal_count = sum(1 for signal in detail_signals if isinstance(signal, bool) and signal)
+    
+    # If 2+ signals are true, likely a detail request
+    if signal_count >= 2:
+        return True
+    
+    # Check if message seems exploratory (contains multiple topics)
+    question_marks = lower.count("?")
+    if question_marks >= 2:
+        return True
+    
+    return False
 
 
 SYSTEM_PROMPT = """You are Nexora AI, an educational data science assistant embedded in a predictive analytics platform.

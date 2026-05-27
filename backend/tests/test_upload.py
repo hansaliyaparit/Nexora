@@ -14,11 +14,13 @@ def test_dataset_upload_success(client, sample_csv):
     
     data = response.json()
     assert "dataset_id" in data
-    assert "shape" in data
-    assert data["shape"]["rows"] == 5
-    assert data["shape"]["columns"] == 4
-    assert "columns" in data
-    assert len(data["columns"]) == 4
+    assert "analysis" in data
+    
+    analysis = data["analysis"]
+    assert analysis["rows"] == 5
+    assert analysis["columns"] == 4
+    assert "column_profiles" in analysis
+    assert len(analysis["column_profiles"]) == 4
 
 def test_dataset_upload_invalid_file_type(client):
     """
