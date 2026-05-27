@@ -4,8 +4,10 @@ An autonomous predictive analytics platform that profiles datasets, builds optim
 
 ---
 
-[![Backend CI](https://github.com/jeet2005/Nexora/actions/workflows/ci-backend.yml/badge.svg)](https://github.com/jeet2005/Nexora/actions/workflows/ci-backend.yml)
-[![Frontend CI](https://github.com/jeet2005/Nexora/actions/workflows/ci-frontend.yml/badge.svg)](https://github.com/jeet2005/Nexora/actions/workflows/ci-frontend.yml)
+[![Backend CI](https://github.com/jeet2005/Nexora/actions/workflows/ci-backend.yml/badge.svg?branch=main)](https://github.com/jeet2005/Nexora/actions/workflows/ci-backend.yml)
+[![Frontend CI](https://github.com/jeet2005/Nexora/actions/workflows/ci-frontend.yml/badge.svg?branch=main)](https://github.com/jeet2005/Nexora/actions/workflows/ci-frontend.yml)
+[![Backend Continuous Integration](https://github.com/jeet2005/Nexora/workflows/Backend%20Continuous%20Integration/badge.svg)](https://github.com/jeet2005/Nexora/actions)
+[![Frontend Continuous Integration](https://github.com/jeet2005/Nexora/workflows/Frontend%20Continuous%20Integration/badge.svg)](https://github.com/jeet2005/Nexora/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Made with FastAPI](https://img.shields.io/badge/Made%20with-FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
