@@ -157,9 +157,10 @@ async def chat_with_dataset(
     except httpx.ConnectError:
         return {
             "reply": (
-                "Ollama is not reachable. Start Ollama locally and pull the model:\n"
+                "Nexora-Helper (Ollama) is not fully available in the online stage. "
+                "To use the advanced open-ended chat assistant, please run Nexora locally with Ollama and pull the model:\n"
                 f"  ollama pull {settings.ollama_model}\n"
-                f"Server expected at {settings.ollama_base_url}"
+                f"Local Ollama server is expected at {settings.ollama_base_url}"
             ),
             "model": settings.ollama_model,
             "ok": False,
