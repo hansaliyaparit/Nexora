@@ -19,6 +19,15 @@ updates:
       interval: "weekly"
       day: "sunday"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@typescript-eslint/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-plugin-react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-plugin-react-hooks"
+        update-types: ["version-update:semver-major"]
     groups:
       node-dependencies:
         patterns:
