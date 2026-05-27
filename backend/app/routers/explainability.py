@@ -1,9 +1,6 @@
 """Phase 4 API routes: Explainability, PDF reports, advanced visualizations."""
 
 import asyncio
-import threading
-from pathlib import Path
-from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
@@ -89,7 +86,9 @@ async def generate_report(dataset_id: str, include_shap: bool = True):
     if include_shap and training_result.best_model:
         df = load_processed_df(dataset_id)
         if df is not None:
-            from app.services.explainability_engine import run_explainability as _run_explain
+            from app.services.explainability_engine import (
+                run_explainability as _run_explain,
+            )
             loop = asyncio.get_event_loop()
             try:
                 explainability_dict = await loop.run_in_executor(
@@ -105,7 +104,7 @@ async def generate_report(dataset_id: str, include_shap: bool = True):
                 pass  # Report will be generated without SHAP section
 
     # Generate PDF
-    from app.services.report_generator import save_pdf_report, generate_pdf_report
+    from app.services.report_generator import generate_pdf_report, save_pdf_report
 
     loop = asyncio.get_event_loop()
     try:

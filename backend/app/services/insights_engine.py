@@ -3,8 +3,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from app.services.dataset_analyzer import _infer_datetime
-
 
 def _top_correlations(df: pd.DataFrame, target: str, limit: int = 8) -> list[dict]:
     if target not in df.columns:

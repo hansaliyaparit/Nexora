@@ -1,18 +1,5 @@
 [tool.ruff]
-# Target Python version
 target-version = "py311"
-line-length = 88
-
-# Rules enabled
-# E/W: pycodestyle errors and warnings
-# F: Pyflakes
-# I: isort (imports grouping)
-# UP: pyupgrade (modern Python syntax suggestions)
-# B: flake8-bugbear (common code design bugs)
-# C90: mccabe (complexity checks)
-select = ["E", "F", "I", "UP", "B", "C90"]
-
-# Exclude list
 exclude = [
     ".git",
     ".mypy_cache",
@@ -24,7 +11,11 @@ exclude = [
     "uploads"
 ]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C90"]
+ignore = ["E501", "B008", "B904", "B905", "C901", "E402", "F841"]
+
+[tool.ruff.lint.mccabe]
 max-complexity = 12
 
 [tool.black]

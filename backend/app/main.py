@@ -2,8 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import advanced, auth, chat, datasets, explainability, pipeline, training
-
+from app.routers import (
+    advanced,
+    auth,
+    chat,
+    datasets,
+    explainability,
+    pipeline,
+    training,
+)
 
 app = FastAPI(
     title=settings.app_name,
@@ -31,6 +38,7 @@ app.include_router(advanced.router)
 
 
 from fastapi.responses import HTMLResponse
+
 
 @app.get("/", response_class=HTMLResponse)
 async def root():

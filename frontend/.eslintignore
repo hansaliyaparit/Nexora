@@ -1,0 +1,10 @@
+node_modules
+dist
+.venv
+.env
+.env.*
+*.log
+coverage
+build
+.next
+out

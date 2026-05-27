@@ -3,14 +3,12 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import threading
 from pathlib import Path
 from typing import Any
 
 from app.config import settings
-from app.models.schemas import DatasetSession, ModelResult, TrainingResult
-from app.services.dataset_store import load_dataframe
+from app.models.schemas import ModelResult, TrainingResult
 from app.services.experiment_service import create_experiment
 from app.services.session_store import load_processed_df, load_session, save_session
 from app.services.training_engine import run_training

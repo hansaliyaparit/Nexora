@@ -1,7 +1,15 @@
 import asyncio
-import json
 
-from fastapi import APIRouter, File, Form, Header, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import (
+    APIRouter,
+    File,
+    Form,
+    Header,
+    HTTPException,
+    UploadFile,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from fastapi.responses import FileResponse
 
 from app.models.schemas import (
@@ -26,13 +34,13 @@ from app.services.deployed_model_service import (
     batch_output_path,
     create_deployment,
     explain_saved_prediction,
-    list_deployable_models,
     list_batches,
+    list_deployable_models,
     list_deployments,
     load_production_status,
     predict_deployment,
-    run_saved_prediction,
     run_batch_prediction,
+    run_saved_prediction,
     set_deployment_active,
     train_selected_models,
 )
@@ -244,10 +252,10 @@ async def training_websocket(websocket: WebSocket, dataset_id: str):
             try:
                 event = await asyncio.wait_for(queue.get(), timeout=1.0)
                 await websocket.send_json(event)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 try:
                     await asyncio.wait_for(websocket.receive_text(), timeout=0.01)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     continue
     except WebSocketDisconnect:
         pass

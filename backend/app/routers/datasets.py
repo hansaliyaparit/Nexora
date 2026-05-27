@@ -1,6 +1,5 @@
-import uuid
 import logging
-from pathlib import Path
+import uuid
 
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
 

@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable, Literal
+from typing import Any, Literal
 
 from sklearn.base import BaseEstimator
 
@@ -33,7 +34,10 @@ def _try_import(name: str):
 
 def _classification_specs() -> list[ModelSpec]:
     from sklearn.calibration import CalibratedClassifierCV
-    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+    from sklearn.discriminant_analysis import (
+        LinearDiscriminantAnalysis,
+        QuadraticDiscriminantAnalysis,
+    )
     from sklearn.dummy import DummyClassifier
     from sklearn.ensemble import (
         AdaBoostClassifier,
@@ -54,7 +58,7 @@ def _classification_specs() -> list[ModelSpec]:
     from sklearn.naive_bayes import BernoulliNB, ComplementNB, GaussianNB, MultinomialNB
     from sklearn.neighbors import KNeighborsClassifier, RadiusNeighborsClassifier
     from sklearn.neural_network import MLPClassifier
-    from sklearn.svm import LinearSVC, NuSVC, SVC
+    from sklearn.svm import SVC, LinearSVC, NuSVC
     from sklearn.tree import DecisionTreeClassifier, ExtraTreeClassifier
 
     specs: list[ModelSpec] = []
@@ -241,7 +245,7 @@ def _regression_specs() -> list[ModelSpec]:
     )
     from sklearn.neighbors import KNeighborsRegressor
     from sklearn.neural_network import MLPRegressor
-    from sklearn.svm import SVR, NuSVR, LinearSVR
+    from sklearn.svm import SVR, LinearSVR, NuSVR
     from sklearn.tree import DecisionTreeRegressor, ExtraTreeRegressor
 
     specs: list[ModelSpec] = []

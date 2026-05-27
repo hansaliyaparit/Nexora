@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import secrets
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +16,13 @@ import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import accuracy_score, f1_score, mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+)
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -27,8 +33,8 @@ from app.models.schemas import (
     DeployedModel,
     ModelDeployment,
     PredictionContribution,
-    PredictionInputField,
     PredictionExplainResponse,
+    PredictionInputField,
     PredictionOutput,
     PredictionReceipt,
     ProductionStatus,
@@ -216,7 +222,7 @@ def train_selected_models(dataset_id: str, model_ids: list[str]) -> ProductionSt
         problem_type=problem_type,
         input_fields=input_fields,
         models=trained,
-        trained_at=datetime.now(timezone.utc).isoformat(),
+        trained_at=datetime.now(UTC).isoformat(),
     )
     _status_path(dataset_id).write_text(status.model_dump_json(indent=2), encoding="utf-8")
     create_experiment(
@@ -307,7 +313,7 @@ def run_saved_prediction(
         predictions=outputs,
         consensus=consensus,
         consensus_label=consensus_label,
-        created_at=datetime.now(timezone.utc).isoformat(),
+        created_at=datetime.now(UTC).isoformat(),
     )
 
 
@@ -361,7 +367,7 @@ def run_batch_prediction(
         "filename": filename,
         "rows": len(df),
         "model_ids": [model.model_id for model in models],
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
         "download_url": f"/api/datasets/{dataset_id}/production/batches/{batch_id}/download",
         "drift": drift,
         "warnings": warnings,
@@ -558,7 +564,7 @@ def create_deployment(dataset_id: str, name: str, model_ids: list[str] | None = 
         "name": name,
         "model_ids": selected,
         "active": True,
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
         "last_used_at": None,
         "api_key_hash": _hash_key(api_key),
         "api_key_preview": f"{api_key[:8]}...{api_key[-4:]}",
@@ -590,7 +596,7 @@ def predict_deployment(deployment_id: str, api_key: str, inputs: dict[str, Any],
             if record.get("api_key_hash") != _hash_key(api_key):
                 raise PermissionError("Invalid deployment API key.")
             selected = model_ids or record.get("model_ids", [])
-            record["last_used_at"] = datetime.now(timezone.utc).isoformat()
+            record["last_used_at"] = datetime.now(UTC).isoformat()
             _save_deployment_records(dataset_id, records)
             return run_saved_prediction(dataset_id, inputs, selected)
     raise ValueError("Deployment not found.")

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import json
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -114,7 +113,7 @@ def run_clustering(dataset_id: str, n_clusters: int, feature_columns: list[str] 
         },
         clusters=clusters,
         preview=[{key: _json_ready(value) for key, value in row.items()} for row in preview_rows],
-        created_at=datetime.now(timezone.utc).isoformat(),
+        created_at=datetime.now(UTC).isoformat(),
     )
     _result_path(dataset_id, "clustering").write_text(result.model_dump_json(indent=2), encoding="utf-8")
     create_experiment(
@@ -207,7 +206,7 @@ def run_time_series(
         metrics=metrics,
         history=history,
         forecast=forecast,
-        created_at=datetime.now(timezone.utc).isoformat(),
+        created_at=datetime.now(UTC).isoformat(),
     )
     _result_path(dataset_id, "time_series").write_text(result.model_dump_json(indent=2), encoding="utf-8")
     create_experiment(

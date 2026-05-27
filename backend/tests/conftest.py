@@ -1,8 +1,10 @@
 import os
 import shutil
 import tempfile
+
 import pytest
 from fastapi.testclient import TestClient
+
 
 @pytest.fixture(scope="session", autouse=True)
 def test_environment():

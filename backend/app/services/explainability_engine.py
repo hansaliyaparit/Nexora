@@ -8,17 +8,17 @@ import warnings
 from typing import Any
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import shap
-
 from sklearn.inspection import permutation_importance
 from sklearn.model_selection import train_test_split
 
 from app.config import settings
-from app.services.model_registry import get_models_for_problem, ModelSpec
+from app.services.model_registry import ModelSpec, get_models_for_problem
 
 warnings.filterwarnings("ignore")
 
@@ -221,8 +221,8 @@ def _plot_prediction_distribution(y_test, y_pred, problem_type: str) -> str:
         ax.set_title("Actual vs Predicted", color=TEXT, fontsize=14, fontweight="bold", pad=12)
         ax.legend(facecolor=PLOT_BG, edgecolor=GRID, labelcolor=MUTED)
     else:
-        from sklearn.metrics import confusion_matrix
         import seaborn as sns
+        from sklearn.metrics import confusion_matrix
         cm = confusion_matrix(y_test, y_pred)
         sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax,
                     linewidths=0.5, linecolor=GRID, cbar_kws={"shrink": 0.8})
@@ -369,8 +369,12 @@ def run_explainability(
 
     # Model metrics
     from sklearn.metrics import (
-        accuracy_score, f1_score, mean_absolute_error,
-        mean_squared_error, r2_score, roc_auc_score,
+        accuracy_score,
+        f1_score,
+        mean_absolute_error,
+        mean_squared_error,
+        r2_score,
+        roc_auc_score,
     )
 
     metrics: dict[str, float] = {}

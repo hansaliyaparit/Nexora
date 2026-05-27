@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import time
 import warnings
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeout
-from typing import Any, Callable
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeout
+from typing import Any
 
 import numpy as np
 import pandas as pd
