@@ -41,6 +41,9 @@ jobs:
       - name: Run TypeScript verification
         run: npx tsc -b
 
+      - name: Run unit tests
+        run: npm run test
+
       - name: Test production build
         run: npm run build
         env:
