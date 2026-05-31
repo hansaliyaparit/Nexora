@@ -16,6 +16,8 @@ jobs:
   lint-typecheck-test:
     name: Lint, Type Check, and Test
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     defaults:
       run:
