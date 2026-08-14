@@ -27,6 +27,12 @@ import {
 
 const LAB_COLORS = ['#93C998', '#7ab37f', '#d4a843', '#c97a5a', '#8bb896', '#a8d9a8'];
 
+declare global {
+  interface Window {
+    __wsEvents?: string[];
+  }
+}
+
 interface Props {
   datasetId: string;
   problemType: string;
@@ -89,10 +95,10 @@ export default function TrainingArena({
       const data = JSON.parse(ev.data) as WsTrainingEvent;
 
       if (typeof window !== 'undefined') {
-        (window as any).__wsEvents = (window as any).__wsEvents || [];
-        (window as any).__wsEvents.push(data.event);
+        window.__wsEvents = window.__wsEvents || [];
+        window.__wsEvents.push(data.event);
         if (data.event === 'model_completed' || data.event === 'snapshot' || data.event === 'training_complete') {
-          (window as any).__wsEvents.push('leaderboard_update');
+          window.__wsEvents.push('leaderboard_update');
         }
       }
 
