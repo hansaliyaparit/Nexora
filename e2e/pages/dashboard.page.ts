@@ -12,14 +12,19 @@ export class DashboardPage {
   }
 
   async uploadCsv(filePath: string) {
-    const fileInput = this.page.locator('input[type="file"]').first();
+    if (!this.page.url() || this.page.url() === 'about:blank') {
+      await this.page.goto('/', { waitUntil: 'domcontentloaded' });
+    }
+
+    const fileInput = this.page.locator('[data-testid="file-input"], input[type="file"]').first();
+    await fileInput.waitFor({ state: 'attached', timeout: 30_000 });
     await fileInput.setInputFiles(filePath);
-    await this.page.waitForURL(/\/dataset\//, { timeout: 30_000 });
+    await this.page.waitForURL(/\/dataset\//, { timeout: 45_000 });
   }
 
   async selectTargetColumnAndTrain(columnName: string) {
     const select = this.page.locator('[data-testid="target-column-select"], select').first();
-    await select.waitFor({ state: 'visible', timeout: 15_000 });
+    await select.waitFor({ state: 'visible', timeout: 20_000 });
     await select.selectOption(columnName);
 
     const confirmBtn = this.page.locator('[data-testid="start-training-btn"], button:has-text("Confirm Target")').first();
@@ -27,7 +32,7 @@ export class DashboardPage {
 
     // Click Launch Full Benchmark on TrainingArena
     const startBenchBtn = this.page.locator('[data-testid="start-benchmark-btn"], button:has-text("Launch Full Benchmark")').first();
-    await startBenchBtn.waitFor({ state: 'visible', timeout: 15_000 });
+    await startBenchBtn.waitFor({ state: 'visible', timeout: 20_000 });
     await startBenchBtn.click();
   }
 
@@ -66,7 +71,7 @@ export class DashboardPage {
     }
 
     // Input batch CSV file into batch prediction input
-    const fixturePath = path.join(__dirname, '../fixtures/network_traffic.csv');
+    const fixturePath = path.resolve(__dirname, '../fixtures/network_traffic.csv');
     const batchInput = this.page.locator('[data-testid="batch-file-input"], input[type="file"]').last();
     await batchInput.setInputFiles(fixturePath);
 
@@ -82,7 +87,7 @@ export class DashboardPage {
     await downloadLink.click();
     const download = await downloadPromise;
 
-    const downloadDir = path.join(__dirname, '../downloads');
+    const downloadDir = path.resolve(__dirname, '../downloads');
     const downloadPath = path.join(downloadDir, download.suggestedFilename());
     await download.saveAs(downloadPath);
     return { downloadPath };

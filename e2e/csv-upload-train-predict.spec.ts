@@ -12,12 +12,12 @@ test.describe.serial('CSV upload -> train -> predict happy path', () => {
     const page = await context.newPage();
     dashboard = new DashboardPage(page);
     await dashboard.init();
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
   });
 
   test('upload sample-data/network_traffic.csv via the file input', async () => {
-    const samplePath = path.join(__dirname, '../sample-data/network_traffic.csv');
-    const fixturePath = path.join(__dirname, 'fixtures/network_traffic.csv');
+    const samplePath = path.resolve(__dirname, '../sample-data/network_traffic.csv');
+    const fixturePath = path.resolve(__dirname, 'fixtures/network_traffic.csv');
     const filePath = fs.existsSync(samplePath) ? samplePath : fixturePath;
 
     await dashboard.uploadCsv(filePath);
