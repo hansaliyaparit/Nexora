@@ -79,6 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500);
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
@@ -90,7 +91,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       setLoading(false);
     });
-    return unsubscribe;
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
@@ -220,7 +224,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateUserPassword, updateUserEmail,
       revokeAllSessions, deleteAccount, signOut,
     }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
