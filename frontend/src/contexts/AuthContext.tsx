@@ -80,20 +80,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser) {
-        try {
-          await syncUserWithBackend(firebaseUser);
-        } catch (e) {
-          console.error('Failed to register user in backend', e);
+    let unsubscribe: (() => void) | undefined;
+    try {
+      unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        setUser(firebaseUser);
+        if (firebaseUser) {
+          try {
+            await syncUserWithBackend(firebaseUser);
+          } catch (e) {
+            console.error('Failed to register user in backend', e);
+          }
         }
-      }
+        setLoading(false);
+      });
+    } catch (e) {
+      console.warn('Firebase auth not available:', e);
       setLoading(false);
-    });
+    }
     return () => {
       clearTimeout(timer);
-      unsubscribe();
+      unsubscribe?.();
     };
   }, []);
 

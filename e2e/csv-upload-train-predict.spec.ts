@@ -12,7 +12,7 @@ test.describe.serial('CSV upload -> train -> predict happy path', () => {
     const page = await context.newPage();
     dashboard = new DashboardPage(page);
     await dashboard.init();
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/', { waitUntil: 'networkidle' });
   });
 
   test('upload sample-data/network_traffic.csv via the file input', async () => {

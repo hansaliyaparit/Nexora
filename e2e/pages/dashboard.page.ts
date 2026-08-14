@@ -12,12 +12,17 @@ export class DashboardPage {
   }
 
   async uploadCsv(filePath: string) {
-    if (!this.page.url() || this.page.url() === 'about:blank') {
-      await this.page.goto('/', { waitUntil: 'domcontentloaded' });
+    // Always navigate fresh – ensures lazy chunks + Firebase init settle
+    await this.page.goto('/', { waitUntil: 'networkidle', timeout: 60_000 });
+
+    // The upload zone is near the bottom of the landing page; scroll to it
+    const uploadSection = this.page.locator('#upload');
+    if (await uploadSection.count() > 0) {
+      await uploadSection.scrollIntoViewIfNeeded();
     }
 
     const fileInput = this.page.locator('[data-testid="file-input"], input[type="file"]').first();
-    await fileInput.waitFor({ state: 'attached', timeout: 30_000 });
+    await fileInput.waitFor({ state: 'attached', timeout: 45_000 });
     await fileInput.setInputFiles(filePath);
     await this.page.waitForURL(/\/dataset\//, { timeout: 45_000 });
   }

@@ -44,7 +44,26 @@ jobs:
         run: |
           python -c "import time, urllib.request; [time.sleep(1) for _ in range(30) if not urllib.request.urlopen('http://127.0.0.1:8000/api/models/registry').read()]" || true
 
-      - name: Start Frontend & Run E2E Tests
+      - name: Start Frontend Dev Server
+        run: |
+          cd frontend && npm run dev &
+          # Wait for Vite to be ready
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:3000 > /dev/null 2>&1; then
+              echo "Frontend is ready"
+              break
+            fi
+            echo "Waiting for frontend... ($i)"
+            sleep 2
+          done
+
+      - name: Verify Frontend Serves Content
+        run: |
+          echo "--- Checking localhost:3000 ---"
+          curl -s http://localhost:3000 | head -50
+          echo "--- Done ---"
+
+      - name: Run E2E Tests
         run: npx playwright test
         env:
           CI: true
