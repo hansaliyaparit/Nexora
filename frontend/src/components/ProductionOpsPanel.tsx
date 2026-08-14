@@ -153,11 +153,13 @@ export default function ProductionOpsPanel({ datasetId, status, selectedModelIds
           <input
             type="file"
             accept=".csv"
+            data-testid="batch-file-input"
             onChange={(event) => setFile(event.target.files?.[0] ?? null)}
             className="block w-full text-sm text-gray-500 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700"
           />
           <button
             type="button"
+            data-testid="run-batch-btn"
             onClick={submitBatch}
             disabled={!file || busy === 'batch'}
             className="btn-primary w-full mt-4 disabled:opacity-50"
@@ -187,6 +189,7 @@ export default function ProductionOpsPanel({ datasetId, status, selectedModelIds
                       </p>
                     </div>
                     <a
+                      data-testid="batch-predict-download"
                       href={
                         baseApi.endsWith('/api')
                           ? `${baseApi.replace(/\/api$/, '')}${batch.download_url}`

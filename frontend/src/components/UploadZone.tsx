@@ -77,6 +77,7 @@ export default function UploadZone() {
         <input
           type="file"
           accept=".csv"
+          data-testid="file-input"
           className="absolute inset-0 opacity-0 cursor-pointer"
           disabled={uploading}
           onChange={(e) => {
@@ -89,6 +90,7 @@ export default function UploadZone() {
           {uploading ? (
             <motion.div
               key="loading"
+              data-testid="upload-status"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

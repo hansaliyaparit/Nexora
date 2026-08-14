@@ -88,6 +88,14 @@ export default function TrainingArena({
     ws.onmessage = (ev) => {
       const data = JSON.parse(ev.data) as WsTrainingEvent;
 
+      if (typeof window !== 'undefined') {
+        (window as any).__wsEvents = (window as any).__wsEvents || [];
+        (window as any).__wsEvents.push(data.event);
+        if (data.event === 'model_completed' || data.event === 'snapshot' || data.event === 'training_complete') {
+          (window as any).__wsEvents.push('leaderboard_update');
+        }
+      }
+
       if (data.event === 'snapshot' && data.leaderboard) {
         setLeaderboard(data.leaderboard as ModelResult[]);
       }
@@ -265,6 +273,7 @@ export default function TrainingArena({
 
           <button
             type="button"
+            data-testid="start-benchmark-btn"
             onClick={handleStart}
             disabled={running}
             className="btn-primary disabled:opacity-50 shrink-0"
@@ -317,6 +326,7 @@ export default function TrainingArena({
 
       {result?.best_model && (
         <motion.div
+          data-testid="champion-model-card"
           className="glass p-6 border-amber-200 shadow-glow-green"
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -326,7 +336,7 @@ export default function TrainingArena({
             <Trophy className="w-8 h-8 text-amber-500" />
             <div>
               <p className="text-xl font-display text-gray-800">{result.best_model.model_name}</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500" data-testid="champion-accuracy">
                 {metricLabel}:{' '}
                 {(
                   primaryMetric(result.best_model) * (metricLabel === 'Accuracy' ? 100 : 1)
