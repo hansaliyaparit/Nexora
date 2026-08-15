@@ -97,22 +97,30 @@ export class DashboardPage {
 
   async runBatchPredictAndDownload() {
     // Navigate to Prediction tab
-    const predictionTab = this.page.locator('[data-testid="workflow-tab-studio"]');
+    const predictionTab = this.page.locator('[data-testid="workflow-tab-studio"], button:has-text("Predict"), button:has-text("Prediction Studio")').first();
     await predictionTab.waitFor({ state: 'visible', timeout: 30_000 });
     await predictionTab.click();
 
-    // Check if models need training in Prediction Studio
-    const trainSelectedBtn = this.page.locator('button:has-text("Train 2 Selected Models"), button:has-text("Train 1 Selected Model"), button:has-text("Train Selected Models"), button:has-text("Train")').first();
-    if (await trainSelectedBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await trainSelectedBtn.click();
-      await this.page.locator('[data-testid="batch-file-input"]').waitFor({ state: 'attached', timeout: 60_000 });
+    // Check if models need training in Prediction Studio or if batch input is already available
+    const trainBtn = this.page.locator('[data-testid="train-selected-models-btn"], button:has-text("Train")').first();
+    const batchInput = this.page.locator('[data-testid="batch-file-input"]').first();
+
+    await Promise.race([
+      trainBtn.waitFor({ state: 'visible', timeout: 30_000 }).catch(() => null),
+      batchInput.waitFor({ state: 'attached', timeout: 30_000 }).catch(() => null),
+    ]);
+
+    if (await trainBtn.isVisible().catch(() => false)) {
+      await trainBtn.click();
+      // Wait for models to finish training and batch input to appear in DOM
+      await batchInput.waitFor({ state: 'attached', timeout: 60_000 });
     }
 
     // Input batch CSV file into batch prediction input
     const fixturePath = path.resolve(__dirname, '../fixtures/network_traffic.csv');
     const samplePath = path.resolve(__dirname, '../../sample-data/network_traffic.csv');
     const batchFile = fs.existsSync(samplePath) ? samplePath : fixturePath;
-    const batchInput = this.page.locator('[data-testid="batch-file-input"], input[type="file"]').first();
+
     await batchInput.waitFor({ state: 'attached', timeout: 30_000 });
     await batchInput.setInputFiles(batchFile);
 
