@@ -37,8 +37,10 @@ export default function WorkflowTabs({ active, onChange, maxUnlocked }: Props) {
           <button
             key={tab.id}
             type="button"
+            data-testid={`workflow-tab-${tab.id}`}
             disabled={!unlocked}
             onClick={() => unlocked && onChange(tab.id)}
+            aria-selected={isActive}
             className={`relative flex-1 min-w-[80px] flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
               isActive
                 ? 'text-nexora-accent-dark font-semibold'

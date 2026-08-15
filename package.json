@@ -4,6 +4,8 @@
   "description": "An autonomous predictive analytics platform that profiles datasets, builds optimized preprocessing pipelines, trains reproducible model registries, runs batch predictions, monitors feature drift, and provides grounded AI educational interactive chats from a single CSV upload.",
   "main": "index.js",
   "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "test:e2e": "playwright test",
     "electron:start": "electron .",
     "electron:pack": "electron-builder --dir",
     "electron:build": "electron-builder -w"
@@ -76,10 +78,12 @@
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
+    "@types/papaparse": "^5.3.15",
     "electron": "^33.2.1",
     "electron-builder": "^26.15.3",
     "ffmpeg-static": "^5.3.0",
     "gif-encoder": "^0.7.2",
+    "papaparse": "^5.4.1",
     "playwright-video": "^2.4.0",
     "typescript": "^7.0.2"
   }

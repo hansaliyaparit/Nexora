@@ -79,18 +79,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser) {
-        try {
-          await syncUserWithBackend(firebaseUser);
-        } catch (e) {
-          console.error('Failed to register user in backend', e);
+    const timer = setTimeout(() => setLoading(false), 500);
+    let unsubscribe: (() => void) | undefined;
+    try {
+      unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        setUser(firebaseUser);
+        if (firebaseUser) {
+          try {
+            await syncUserWithBackend(firebaseUser);
+          } catch (e) {
+            console.error('Failed to register user in backend', e);
+          }
         }
-      }
+        setLoading(false);
+      });
+    } catch (e) {
+      console.warn('Firebase auth not available:', e);
       setLoading(false);
-    });
-    return unsubscribe;
+    }
+    return () => {
+      clearTimeout(timer);
+      unsubscribe?.();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
@@ -220,7 +230,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateUserPassword, updateUserEmail,
       revokeAllSessions, deleteAccount, signOut,
     }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

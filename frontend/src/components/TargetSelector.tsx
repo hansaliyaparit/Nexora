@@ -97,6 +97,7 @@ export default function TargetSelector({ datasetId, analysis, onConfigured }: Pr
           </label>
           <select
             value={target}
+            data-testid="target-column-select"
             onChange={(e) => setTarget(e.target.value)}
             className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100 transition-all"
           >
@@ -136,6 +137,7 @@ export default function TargetSelector({ datasetId, analysis, onConfigured }: Pr
 
       <button
         type="button"
+        data-testid="start-training-btn"
         onClick={handleConfigure}
         disabled={loading || !target}
         className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"

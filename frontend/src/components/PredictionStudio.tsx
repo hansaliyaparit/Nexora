@@ -277,6 +277,7 @@ export default function PredictionStudio({ datasetId, onModelsTrained }: Props) 
 
           <button
             type="button"
+            data-testid="train-selected-models-btn"
             onClick={handleTrain}
             disabled={training || selected.length === 0}
             className="btn-primary w-full mt-5 disabled:opacity-50"

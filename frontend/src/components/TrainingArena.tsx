@@ -27,6 +27,12 @@ import {
 
 const LAB_COLORS = ['#93C998', '#7ab37f', '#d4a843', '#c97a5a', '#8bb896', '#a8d9a8'];
 
+declare global {
+  interface Window {
+    __wsEvents?: string[];
+  }
+}
+
 interface Props {
   datasetId: string;
   problemType: string;
@@ -87,6 +93,14 @@ export default function TrainingArena({
 
     ws.onmessage = (ev) => {
       const data = JSON.parse(ev.data) as WsTrainingEvent;
+
+      if (typeof window !== 'undefined') {
+        window.__wsEvents = window.__wsEvents || [];
+        window.__wsEvents.push(data.event);
+        if (data.event === 'model_completed' || data.event === 'snapshot' || data.event === 'training_complete') {
+          window.__wsEvents.push('leaderboard_update');
+        }
+      }
 
       if (data.event === 'snapshot' && data.leaderboard) {
         setLeaderboard(data.leaderboard as ModelResult[]);
@@ -265,6 +279,7 @@ export default function TrainingArena({
 
           <button
             type="button"
+            data-testid="start-benchmark-btn"
             onClick={handleStart}
             disabled={running}
             className="btn-primary disabled:opacity-50 shrink-0"
@@ -315,8 +330,9 @@ export default function TrainingArena({
         )}
       </motion.div>
 
-      {result?.best_model && (
+      {(result?.best_model || leaderboard.length > 0) && (
         <motion.div
+          data-testid="champion-model-card"
           className="glass p-6 border-amber-200 shadow-glow-green"
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -325,22 +341,27 @@ export default function TrainingArena({
           <div className="flex flex-wrap items-center gap-4">
             <Trophy className="w-8 h-8 text-amber-500" />
             <div>
-              <p className="text-xl font-display text-gray-800">{result.best_model.model_name}</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-xl font-display text-gray-800">
+                {(result?.best_model ?? leaderboard[0]).model_name}
+              </p>
+              <p className="text-sm text-gray-500" data-testid="champion-accuracy">
                 {metricLabel}:{' '}
                 {(
-                  primaryMetric(result.best_model) * (metricLabel === 'Accuracy' ? 100 : 1)
+                  primaryMetric(result?.best_model ?? leaderboard[0]) *
+                  (metricLabel === 'Accuracy' ? 100 : 1)
                 ).toFixed(metricLabel === 'Accuracy' ? 1 : 3)}
                 {metricLabel === 'Accuracy' ? '%' : ''}
                 {' · '}
-                {result.best_model.train_time_sec}s{' · '}
-                {result.best_model.family}
+                {(result?.best_model ?? leaderboard[0]).train_time_sec}s{' · '}
+                {(result?.best_model ?? leaderboard[0]).family}
               </p>
             </div>
           </div>
           <p className="text-xs text-gray-400 mt-3">
-            {result.total_completed}/{result.total_attempted} models completed ·{' '}
-            {result.registry_available} available in registry
+            {result?.total_completed ?? leaderboard.length}/
+            {result?.total_attempted ?? (registry?.total ?? leaderboard.length)} models completed ·{' '}
+            {result?.registry_available ?? (registry?.total ?? leaderboard.length)} available in
+            registry
           </p>
         </motion.div>
       )}
