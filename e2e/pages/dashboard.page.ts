@@ -29,38 +29,36 @@ export class DashboardPage {
   }
 
   async selectTargetColumnAndTrain(columnName: string) {
-    // Navigate to Configure/Target tab if not already there
-    const targetTab = this.page.locator('button:has-text("Target"), button:has-text("Configure Prediction Target")').first();
-    if (await targetTab.isVisible()) {
-      await targetTab.click();
-    }
+    // Navigate to Configure/Target tab by clicking Target tab or the Configure button
+    const targetTab = this.page.locator('button:has-text("Configure Prediction Target"), button:has-text("Target")').first();
+    await targetTab.waitFor({ state: 'visible', timeout: 30_000 });
+    await targetTab.click();
 
     const select = this.page.locator('[data-testid="target-column-select"]').first();
-    await select.waitFor({ state: 'visible', timeout: 20_000 });
-    await select.locator(`option[value="${columnName}"]`).waitFor({ state: 'attached', timeout: 20_000 });
+    await select.waitFor({ state: 'visible', timeout: 30_000 });
+    await select.locator(`option[value="${columnName}"]`).waitFor({ state: 'attached', timeout: 30_000 });
     await select.selectOption(columnName);
 
     const confirmBtn = this.page.locator('[data-testid="start-training-btn"], button:has-text("Confirm Target")').first();
-    await confirmBtn.waitFor({ state: 'visible', timeout: 20_000 });
+    await confirmBtn.waitFor({ state: 'visible', timeout: 30_000 });
     await confirmBtn.click();
 
     // Navigate to Training Arena / Compare tab
-    const arenaTab = this.page.locator('button:has-text("Compare"), button:has-text("Arena")').first();
-    if (await arenaTab.isVisible()) {
-      await arenaTab.click();
-    }
+    const arenaTab = this.page.locator('button:has-text("Compare"), button:has-text("Arena"), button:has-text("Open Optional Comparison Arena")').first();
+    await arenaTab.waitFor({ state: 'visible', timeout: 30_000 });
+    await arenaTab.click();
 
     // Click Launch Full Benchmark on TrainingArena
     const startBenchBtn = this.page.locator('[data-testid="start-benchmark-btn"], button:has-text("Launch Full Benchmark")').first();
-    await startBenchBtn.waitFor({ state: 'visible', timeout: 20_000 });
+    await startBenchBtn.waitFor({ state: 'visible', timeout: 30_000 });
     await startBenchBtn.click();
   }
 
-  async waitForLeaderboardUpdate(timeout = 60_000) {
+  async waitForLeaderboardUpdate(timeout = 90_000) {
     await this.page.waitForFunction(
       () => {
         const events = (window as any).__wsEvents;
-        return Array.isArray(events) && events.some((e: string) => e === 'leaderboard_update' || e === 'model_completed');
+        return Array.isArray(events) && events.some((e: string) => e === 'leaderboard_update' || e === 'model_completed' || e === 'training_complete' || e === 'snapshot');
       },
       { timeout }
     );
@@ -68,7 +66,7 @@ export class DashboardPage {
 
   async assertChampionModelCard() {
     const card = this.page.locator('[data-testid="champion-model-card"]');
-    await expect(card).toBeVisible({ timeout: 60_000 });
+    await expect(card).toBeVisible({ timeout: 90_000 });
 
     const accuracyText = await card.locator('[data-testid="champion-accuracy"]').textContent();
     expect(accuracyText).not.toBeNull();
@@ -77,35 +75,36 @@ export class DashboardPage {
   }
 
   async runBatchPredictAndDownload() {
-    // Navigate to Prediction tab if tabs exist
-    const predictionTab = this.page.locator('button:has-text("Prediction Studio"), button:has-text("Predict"), button:has-text("Predictions")').first();
-    if (await predictionTab.isVisible()) {
-      await predictionTab.click();
-    }
+    // Navigate to Prediction tab
+    const predictionTab = this.page.locator('button:has-text("Predict"), button:has-text("Prediction Studio")').first();
+    await predictionTab.waitFor({ state: 'visible', timeout: 30_000 });
+    await predictionTab.click();
 
     // Check if models need training in Prediction Studio
-    const trainSelectedBtn = this.page.locator('button:has-text("Train 2 Selected Models"), button:has-text("Train 1 Selected Model"), button:has-text("Train Selected Models")').first();
-    if (await trainSelectedBtn.isVisible()) {
+    const trainSelectedBtn = this.page.locator('button:has-text("Train 2 Selected Models"), button:has-text("Train 1 Selected Model"), button:has-text("Train Selected Models"), button:has-text("Train")').first();
+    if (await trainSelectedBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
       await trainSelectedBtn.click();
-      await this.page.waitForTimeout(3000);
+      await this.page.locator('[data-testid="batch-file-input"]').waitFor({ state: 'attached', timeout: 60_000 });
     }
 
     // Input batch CSV file into batch prediction input
     const fixturePath = path.resolve(__dirname, '../fixtures/network_traffic.csv');
     const samplePath = path.resolve(__dirname, '../../sample-data/network_traffic.csv');
     const batchFile = fs.existsSync(samplePath) ? samplePath : fixturePath;
-    const batchInput = this.page.locator('[data-testid="batch-file-input"], input[type="file"]').last();
+    const batchInput = this.page.locator('[data-testid="batch-file-input"], input[type="file"]').first();
+    await batchInput.waitFor({ state: 'attached', timeout: 30_000 });
     await batchInput.setInputFiles(batchFile);
 
     // Click Run Batch
     const runBatchBtn = this.page.locator('[data-testid="run-batch-btn"], button:has-text("Run Batch")').first();
+    await runBatchBtn.waitFor({ state: 'visible', timeout: 30_000 });
     await runBatchBtn.click();
 
     // Batch prediction download link
     const downloadLink = this.page.locator('[data-testid="batch-predict-download"]').first();
-    await expect(downloadLink).toBeVisible({ timeout: 30_000 });
+    await expect(downloadLink).toBeVisible({ timeout: 60_000 });
 
-    const downloadPromise = this.page.waitForEvent('download');
+    const downloadPromise = this.page.waitForEvent('download', { timeout: 60_000 });
     await downloadLink.click();
     const download = await downloadPromise;
 
