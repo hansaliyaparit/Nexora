@@ -192,7 +192,12 @@ export default function DatasetDashboard() {
           </motion.div>
 
           <motion.div className="mt-8 flex justify-center">
-            <button type="button" onClick={() => setTab('configure')} className="btn-primary">
+            <button
+              type="button"
+              data-testid="configure-target-btn"
+              onClick={() => setTab('configure')}
+              className="btn-primary"
+            >
               Configure Prediction Target →
             </button>
           </motion.div>

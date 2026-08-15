@@ -25,31 +25,52 @@ export class DashboardPage {
     const fileInput = this.page.locator('[data-testid="file-input"], input[type="file"]').first();
     await fileInput.waitFor({ state: 'attached', timeout: 45_000 });
     await fileInput.setInputFiles(filePath);
+    await this.waitForDatasetReady();
+  }
+
+  async waitForDatasetReady() {
     await this.page.waitForURL(/\/dataset\//, { timeout: 45_000 });
+    await this.page
+      .locator('[data-testid="workflow-tab-configure"]')
+      .waitFor({ state: 'visible', timeout: 45_000 });
+  }
+
+  async openConfigureTab() {
+    const configureTab = this.page.locator('[data-testid="workflow-tab-configure"]');
+    await configureTab.waitFor({ state: 'visible', timeout: 30_000 });
+    await expect(configureTab).toBeEnabled({ timeout: 30_000 });
+
+    if ((await configureTab.getAttribute('aria-selected')) !== 'true') {
+      await configureTab.click();
+    }
+
+    await this.page
+      .locator('[data-testid="target-column-select"]')
+      .waitFor({ state: 'visible', timeout: 30_000 });
   }
 
   async selectTargetColumnAndTrain(columnName: string) {
-    // Navigate to Configure/Target tab by clicking Target tab or the Configure button
-    const targetTab = this.page.locator('button:has-text("Configure Prediction Target"), button:has-text("Target")').first();
-    await targetTab.waitFor({ state: 'visible', timeout: 30_000 });
-    await targetTab.click();
+    await this.waitForDatasetReady();
+    await this.openConfigureTab();
 
-    const select = this.page.locator('[data-testid="target-column-select"]').first();
-    await select.waitFor({ state: 'visible', timeout: 30_000 });
+    const select = this.page.locator('[data-testid="target-column-select"]');
     await select.locator(`option[value="${columnName}"]`).waitFor({ state: 'attached', timeout: 30_000 });
     await select.selectOption(columnName);
 
-    const confirmBtn = this.page.locator('[data-testid="start-training-btn"], button:has-text("Confirm Target")').first();
-    await confirmBtn.waitFor({ state: 'visible', timeout: 30_000 });
+    const confirmBtn = this.page.locator('[data-testid="start-training-btn"]');
+    await expect(confirmBtn).toBeEnabled({ timeout: 10_000 });
+    const configureResponse = this.page.waitForResponse(
+      (resp) => resp.url().includes('/configure') && resp.status() === 200,
+      { timeout: 60_000 },
+    );
     await confirmBtn.click();
+    await configureResponse;
 
-    // Navigate to Training Arena / Compare tab
-    const arenaTab = this.page.locator('button:has-text("Compare"), button:has-text("Arena"), button:has-text("Open Optional Comparison Arena")').first();
-    await arenaTab.waitFor({ state: 'visible', timeout: 30_000 });
+    const arenaTab = this.page.locator('[data-testid="workflow-tab-arena"]');
+    await expect(arenaTab).toBeEnabled({ timeout: 30_000 });
     await arenaTab.click();
 
-    // Click Launch Full Benchmark on TrainingArena
-    const startBenchBtn = this.page.locator('[data-testid="start-benchmark-btn"], button:has-text("Launch Full Benchmark")').first();
+    const startBenchBtn = this.page.locator('[data-testid="start-benchmark-btn"]');
     await startBenchBtn.waitFor({ state: 'visible', timeout: 30_000 });
     await startBenchBtn.click();
   }
@@ -76,7 +97,7 @@ export class DashboardPage {
 
   async runBatchPredictAndDownload() {
     // Navigate to Prediction tab
-    const predictionTab = this.page.locator('button:has-text("Predict"), button:has-text("Prediction Studio")').first();
+    const predictionTab = this.page.locator('[data-testid="workflow-tab-studio"]');
     await predictionTab.waitFor({ state: 'visible', timeout: 30_000 });
     await predictionTab.click();
 

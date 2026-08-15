@@ -42,7 +42,24 @@ jobs:
 
       - name: Wait for Backend Server
         run: |
-          python -c "import time, urllib.request; [time.sleep(1) for _ in range(30) if not urllib.request.urlopen('http://127.0.0.1:8000/api/models/registry').read()]" || true
+          python - <<'PY'
+          import time
+          import urllib.error
+          import urllib.request
+
+          url = "http://127.0.0.1:8000/api/models/registry"
+          for attempt in range(1, 31):
+              try:
+                  with urllib.request.urlopen(url, timeout=2) as resp:
+                      resp.read()
+                  print(f"Backend ready after {attempt} attempt(s)")
+                  break
+              except (urllib.error.URLError, TimeoutError) as exc:
+                  print(f"Waiting for backend... ({attempt}/30) {exc}")
+                  time.sleep(2)
+          else:
+              raise SystemExit("Backend did not become ready in time")
+          PY
 
       - name: Start Frontend Dev Server
         run: |
