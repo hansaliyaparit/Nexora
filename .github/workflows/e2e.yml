@@ -93,9 +93,17 @@ jobs:
           name: playwright-report
           path: playwright-report/
 
+      - name: Upload Playwright Test Results on Failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-test-results
+          path: test-results/
+
       - name: Upload E2E Downloads on Failure
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: e2e-downloads
           path: e2e/downloads/
+          if-no-files-found: ignore
