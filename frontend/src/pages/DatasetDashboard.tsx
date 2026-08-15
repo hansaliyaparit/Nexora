@@ -75,11 +75,9 @@ export default function DatasetDashboard() {
   const maxUnlocked: WorkflowTab =
     session?.status === 'trained'
       ? 'insights'
-      : session?.status === 'preprocessed'
+      : session?.status === 'preprocessed' || session?.status === 'configured' || session?.target_column
         ? 'arena'
-        : session?.status === 'configured'
-          ? 'preprocess'
-          : 'overview';
+        : 'configure';
 
   const handleConfigured = (res: ConfigureTargetResponse) => {
     setSession(res.session);
@@ -315,7 +313,7 @@ export default function DatasetDashboard() {
 
       {tab === 'arena' && (
         <motion.div key="arena" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          {session?.status === 'preprocessed' || session?.status === 'trained' ? (
+          {session?.status === 'preprocessed' || session?.status === 'trained' || session?.status === 'configured' || session?.target_column ? (
             <Suspense fallback={<TabLoader label="Loading training arena…" />}>
               <TrainingArena
                 datasetId={datasetId}

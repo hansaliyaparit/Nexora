@@ -1,5 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import path from 'path';
+import fs from 'fs';
 
 export class DashboardPage {
   constructor(public readonly page: Page) {}
@@ -28,12 +29,26 @@ export class DashboardPage {
   }
 
   async selectTargetColumnAndTrain(columnName: string) {
-    const select = this.page.locator('[data-testid="target-column-select"], select').first();
+    // Navigate to Configure/Target tab if not already there
+    const targetTab = this.page.locator('button:has-text("Target"), button:has-text("Configure Prediction Target")').first();
+    if (await targetTab.isVisible()) {
+      await targetTab.click();
+    }
+
+    const select = this.page.locator('[data-testid="target-column-select"]').first();
     await select.waitFor({ state: 'visible', timeout: 20_000 });
+    await select.locator(`option[value="${columnName}"]`).waitFor({ state: 'attached', timeout: 20_000 });
     await select.selectOption(columnName);
 
     const confirmBtn = this.page.locator('[data-testid="start-training-btn"], button:has-text("Confirm Target")').first();
+    await confirmBtn.waitFor({ state: 'visible', timeout: 20_000 });
     await confirmBtn.click();
+
+    // Navigate to Training Arena / Compare tab
+    const arenaTab = this.page.locator('button:has-text("Compare"), button:has-text("Arena")').first();
+    if (await arenaTab.isVisible()) {
+      await arenaTab.click();
+    }
 
     // Click Launch Full Benchmark on TrainingArena
     const startBenchBtn = this.page.locator('[data-testid="start-benchmark-btn"], button:has-text("Launch Full Benchmark")').first();
@@ -63,7 +78,7 @@ export class DashboardPage {
 
   async runBatchPredictAndDownload() {
     // Navigate to Prediction tab if tabs exist
-    const predictionTab = this.page.locator('button:has-text("Prediction Studio"), button:has-text("Predictions")').first();
+    const predictionTab = this.page.locator('button:has-text("Prediction Studio"), button:has-text("Predict"), button:has-text("Predictions")').first();
     if (await predictionTab.isVisible()) {
       await predictionTab.click();
     }
@@ -77,8 +92,10 @@ export class DashboardPage {
 
     // Input batch CSV file into batch prediction input
     const fixturePath = path.resolve(__dirname, '../fixtures/network_traffic.csv');
+    const samplePath = path.resolve(__dirname, '../../sample-data/network_traffic.csv');
+    const batchFile = fs.existsSync(samplePath) ? samplePath : fixturePath;
     const batchInput = this.page.locator('[data-testid="batch-file-input"], input[type="file"]').last();
-    await batchInput.setInputFiles(fixturePath);
+    await batchInput.setInputFiles(batchFile);
 
     // Click Run Batch
     const runBatchBtn = this.page.locator('[data-testid="run-batch-btn"], button:has-text("Run Batch")').first();
@@ -93,6 +110,9 @@ export class DashboardPage {
     const download = await downloadPromise;
 
     const downloadDir = path.resolve(__dirname, '../downloads');
+    if (!fs.existsSync(downloadDir)) {
+      fs.mkdirSync(downloadDir, { recursive: true });
+    }
     const downloadPath = path.join(downloadDir, download.suggestedFilename());
     await download.saveAs(downloadPath);
     return { downloadPath };
